@@ -157,6 +157,10 @@ class MobSpawner(commands.Cog):
             engage_msg.edit(suppress=True),
         )
 
+        shield_pearl_active = db_user.shield_pearl and (
+            arrow.get(db_user.shield_pearl).shift(months=1) > arrow.utcnow()
+        )
+
         await self.karen.econ_pause(user.id)
 
         try:
@@ -269,6 +273,9 @@ class MobSpawner(commands.Cog):
                             break
 
                     mob_dmg = 0
+
+                if shield_pearl_active and random.randint(1, 6) == 1:
+                    mob_dmg //= 2
 
                 user_health -= mob_dmg
                 user_health = max(user_health, 0)
